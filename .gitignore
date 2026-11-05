@@ -18,5 +18,7 @@ local.properties
 debug.keystore
 .aistudio
 push_to_github.bat
+push.log
+
 
 
