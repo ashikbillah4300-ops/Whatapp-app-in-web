@@ -35,7 +35,7 @@ jobs:
 
       - name: Build Debug APK
         run: |
-          gradle assembleDebug --stacktrace
+          gradle assembleDebug --no-configuration-cache --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
@@ -50,7 +50,7 @@ jobs:
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: WhatsApp Web Android v1.0.${{ github.run_number }}
-          body: "Automatic build of WhatsApp Web Android APK."
+          body: "Direct download link for WhatsApp Web Android APK."
           files: app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
