@@ -38,17 +38,7 @@ jobs:
       - name: Build Debug APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-configuration-cache --stacktrace > build_log.txt 2>&1 || (
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git checkout -B build-error-log
-            cp build_log.txt build_error.txt
-            git add build_error.txt
-            git commit -m "Log build failure"
-            git push -f origin build-error-log
-            cat build_log.txt | grep -E "e: |FAILURE:|What went wrong:" -A 10
-            exit 1
-          )
+          ./gradlew assembleDebug --no-configuration-cache --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
@@ -60,9 +50,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: success() && github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: WhatsApp Web Android v1.0.${{ github.run_number }}
-          body: "Direct download link for WhatsApp Web Android APK."
+          tag_name: v1.1.${{ github.run_number }}
+          name: WhatsApp Web Android v1.1.${{ github.run_number }}
+          body: "Updated version with Zoom In/Out controls and direct media/file downloads to phone storage."
           files: app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
