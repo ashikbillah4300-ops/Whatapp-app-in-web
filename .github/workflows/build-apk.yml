@@ -24,6 +24,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Generate Debug Keystore
+        run: |
+          keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
       - name: Accept Android SDK Licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
@@ -34,20 +38,7 @@ jobs:
       - name: Build Debug APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-configuration-cache --stacktrace > build_log.txt 2>&1 || true
-
-      - name: Check APK and Save Log If Failed
-        run: |
-          if [ $(find app/build/outputs/apk/debug -name "*.apk" 2>/dev/null | wc -l) -eq 0 ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git checkout -B build-error-log
-            cp build_log.txt build_error.txt
-            git add build_error.txt
-            git commit -m "Log build failure"
-            git push -f origin build-error-log
-            exit 1
-          fi
+          ./gradlew assembleDebug --no-configuration-cache --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
