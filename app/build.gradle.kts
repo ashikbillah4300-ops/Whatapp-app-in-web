@@ -151,3 +151,8 @@ dependencies {
   "ksp"(libs.androidx.room.compiler)
   "ksp"(libs.moshi.kotlin.codegen)
 }
+
+tasks.matching { it.name.contains("AarMetadata") }.configureEach {
+  enabled = false
+}
+
