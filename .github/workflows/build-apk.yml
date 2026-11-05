@@ -35,19 +35,17 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-configuration-cache --stacktrace > build_log.txt 2>&1 || true
-          cat build_log.txt
 
-      - name: Upload Build Log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build_log.txt
-
-      - name: Check Build Success
+      - name: Check APK and Save Log If Failed
         run: |
           if [ ! -f app/build/outputs/apk/debug/app-debug.apk ]; then
-            echo "APK was not generated. Check build_log.txt."
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -B build-error-log
+            cp build_log.txt build_error.txt
+            git add build_error.txt
+            git commit -m "Log build failure"
+            git push -f origin build-error-log
             exit 1
           fi
 
