@@ -38,7 +38,17 @@ jobs:
       - name: Build Debug APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-configuration-cache --stacktrace
+          ./gradlew assembleDebug --no-configuration-cache --stacktrace > build_log.txt 2>&1 || (
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -B build-error-log
+            cp build_log.txt build_error.txt
+            git add build_error.txt
+            git commit -m "Log build failure"
+            git push -f origin build-error-log
+            cat build_log.txt | grep -E "e: |FAILURE:|What went wrong:" -A 10
+            exit 1
+          )
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4

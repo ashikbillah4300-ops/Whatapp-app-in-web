@@ -278,7 +278,7 @@ class DownloadHandler(
             )
 
             val notification = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                .setSmallIcon(android.R.drawable.ic_menu_save)
                 .setContentTitle("Download Complete")
                 .setContentText(fileName)
                 .setContentIntent(pendingIntent)
