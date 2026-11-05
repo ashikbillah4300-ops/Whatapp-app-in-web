@@ -48,8 +48,10 @@ fun WebContainer(
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
 
-            // Setup download listener
-            setDownloadListener(DownloadHandler(context))
+            // Setup download listener and JavaScript blob bridge
+            val downloadHandler = DownloadHandler(context)
+            setDownloadListener(downloadHandler)
+            downloadHandler.attachWebView(this)
 
             // Configure security and functionality settings
             settings.apply {
@@ -123,6 +125,58 @@ fun WebContainer(
                     super.onPageFinished(view, url)
                     onLoadingChanged(false, 100)
                     SessionManager.flushCookies()
+
+                    // Enable zoom by overriding WhatsApp Web's non-scalable viewport meta tag
+                    val clientScript = """
+                        (function() {
+                            function enableZoom() {
+                                var metas = document.getElementsByTagName('meta');
+                                var found = false;
+                                for (var i = 0; i < metas.length; i++) {
+                                    if (metas[i].name === 'viewport') {
+                                        metas[i].content = 'width=device-width, initial-scale=1.0, minimum-scale=0.2, maximum-scale=6.0, user-scalable=yes';
+                                        found = true;
+                                    }
+                                }
+                                if (!found) {
+                                    var meta = document.createElement('meta');
+                                    meta.name = 'viewport';
+                                    meta.content = 'width=device-width, initial-scale=1.0, minimum-scale=0.2, maximum-scale=6.0, user-scalable=yes';
+                                    if (document.head) document.head.appendChild(meta);
+                                }
+                                if (document.documentElement) document.documentElement.style.touchAction = 'manipulation';
+                                if (document.body) document.body.style.touchAction = 'manipulation';
+                            }
+                            enableZoom();
+                            setInterval(enableZoom, 3000);
+
+                            // Intercept blob file download links in DOM
+                            if (!window._blobClickInterceptor) {
+                                window._blobClickInterceptor = true;
+                                document.addEventListener('click', function(e) {
+                                    var link = e.target.closest('a');
+                                    if (link && link.href && link.href.startsWith('blob:')) {
+                                        var name = link.getAttribute('download') || ('WhatsApp_' + Date.now());
+                                        fetch(link.href)
+                                            .then(function(res) { return res.blob(); })
+                                            .then(function(blob) {
+                                                var reader = new FileReader();
+                                                reader.onloadend = function() {
+                                                    if (window.AndroidBlobDownloader && window.AndroidBlobDownloader.saveBase64) {
+                                                        window.AndroidBlobDownloader.saveBase64(reader.result, name, blob.type || '');
+                                                    }
+                                                };
+                                                reader.readAsDataURL(blob);
+                                            })
+                                            .catch(function(err) {
+                                                console.error('Blob click download error:', err);
+                                            });
+                                    }
+                                }, true);
+                            }
+                        })();
+                    """.trimIndent()
+                    view?.evaluateJavascript(clientScript, null)
                 }
 
                 override fun onReceivedError(
