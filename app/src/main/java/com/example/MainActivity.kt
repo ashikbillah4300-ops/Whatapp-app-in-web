@@ -421,67 +421,6 @@ fun WhatsAppWebApp(
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = {
-                                    Text(if (isDesktopMode) "Switch to Mobile View" else "Switch to Desktop View")
-                                },
-                                onClick = {
-                                    showMenu = false
-                                    val newMode = !isDesktopMode
-                                    isDesktopMode = newMode
-                                    appSettings.isDesktopMode = newMode
-                                    webViewRef?.reload()
-                                    Toast.makeText(
-                                        context,
-                                        if (newMode) "Desktop View (Recommended for QR Pairing)" else "Mobile View Active",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        if (isDesktopMode) Icons.Default.PhoneAndroid else Icons.Default.Computer,
-                                        contentDescription = null
-                                    )
-                                },
-                                modifier = Modifier.testTag("desktop_toggle_menu_item")
-                            )
-
-                            DropdownMenuItem(
-                                text = { Text("Display & Text Scale ($currentZoom%)") },
-                                onClick = {
-                                    showMenu = false
-                                    showZoomDialog = true
-                                },
-                                leadingIcon = {
-                                    Icon(Icons.Default.FormatSize, contentDescription = null)
-                                },
-                                modifier = Modifier.testTag("zoom_menu_item")
-                            )
-
-                            DropdownMenuItem(
-                                text = { Text("Open in External Browser") },
-                                onClick = {
-                                    showMenu = false
-                                    onOpenBrowser(WebSecurityPolicy.OFFICIAL_WHATSAPP_WEB_URL)
-                                },
-                                leadingIcon = {
-                                    Icon(Icons.Default.OpenInBrowser, contentDescription = null)
-                                },
-                                modifier = Modifier.testTag("open_browser_menu_item")
-                            )
-
-                            DropdownMenuItem(
-                                text = { Text("Open Official WhatsApp App") },
-                                onClick = {
-                                    showMenu = false
-                                    onOpenWhatsAppApp()
-                                },
-                                leadingIcon = {
-                                    Icon(Icons.Default.PhoneAndroid, contentDescription = null)
-                                },
-                                modifier = Modifier.testTag("open_whatsapp_app_menu_item")
-                            )
-
-                            DropdownMenuItem(
                                 text = { Text("Reset Web Session (Logout)") },
                                 onClick = {
                                     showMenu = false
