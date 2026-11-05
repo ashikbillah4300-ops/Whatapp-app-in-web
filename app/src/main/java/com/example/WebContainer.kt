@@ -1,6 +1,7 @@
 package com.example
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -52,6 +53,36 @@ fun WebContainer(
             val downloadHandler = DownloadHandler(context)
             setDownloadListener(downloadHandler)
             downloadHandler.attachWebView(this)
+
+            // Long-press image saver for direct photo/media saving
+            setOnLongClickListener {
+                val hitTest = hitTestResult
+                val imageUrl = when (hitTest.type) {
+                    WebView.HitTestResult.IMAGE_TYPE,
+                    WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> hitTest.extra
+                    else -> null
+                }
+
+                if (!imageUrl.isNullOrBlank()) {
+                    AlertDialog.Builder(context)
+                        .setTitle("ছবি ডাউনলোড করবেন?")
+                        .setMessage("ছবিটি আপনার ফোনের Downloads ফোল্ডারে সেভ হবে।")
+                        .setPositiveButton("ডাউনলোড") { _, _ ->
+                            downloadHandler.onDownloadStart(
+                                imageUrl,
+                                settings.userAgentString,
+                                null,
+                                "image/jpeg",
+                                0
+                            )
+                        }
+                        .setNegativeButton("বাতিল", null)
+                        .show()
+                    true
+                } else {
+                    false
+                }
+            }
 
             // Configure security and functionality settings
             settings.apply {
@@ -126,7 +157,7 @@ fun WebContainer(
                     onLoadingChanged(false, 100)
                     SessionManager.flushCookies()
 
-                    // Enable zoom by overriding WhatsApp Web's non-scalable viewport meta tag
+                    // Enable zoom & hook blob media downloads for photos, videos, and documents
                     val clientScript = """
                         (function() {
                             function enableZoom() {
@@ -149,6 +180,44 @@ fun WebContainer(
                             }
                             enableZoom();
                             setInterval(enableZoom, 3000);
+
+                            // Prevent WhatsApp from instantly revoking blob URLs before download completes
+                            if (!window._revokeHooked && window.URL && window.URL.revokeObjectURL) {
+                                window._revokeHooked = true;
+                                var origRevoke = window.URL.revokeObjectURL;
+                                window.URL.revokeObjectURL = function(u) {
+                                    setTimeout(function() {
+                                        try { origRevoke.call(window.URL, u); } catch (_) {}
+                                    }, 45000);
+                                };
+                            }
+
+                            // Intercept programmatic click on download links (used by WhatsApp Web for photo/video downloads)
+                            if (!window._anchorClickHooked && window.HTMLAnchorElement) {
+                                window._anchorClickHooked = true;
+                                var origClick = HTMLAnchorElement.prototype.click;
+                                HTMLAnchorElement.prototype.click = function() {
+                                    var href = this.href;
+                                    if (href && (href.startsWith('blob:') || href.startsWith('data:'))) {
+                                        var name = this.getAttribute('download') || this.download || ('WhatsApp_Media_' + Date.now());
+                                        fetch(href)
+                                            .then(function(res) { return res.blob(); })
+                                            .then(function(blob) {
+                                                var reader = new FileReader();
+                                                reader.onloadend = function() {
+                                                    if (window.AndroidBlobDownloader && window.AndroidBlobDownloader.saveBase64) {
+                                                        window.AndroidBlobDownloader.saveBase64(reader.result, name, blob.type || '');
+                                                    }
+                                                };
+                                                reader.readAsDataURL(blob);
+                                            })
+                                            .catch(function(err) {
+                                                console.error('Blob click download error:', err);
+                                            });
+                                    }
+                                    return origClick.apply(this, arguments);
+                                };
+                            }
 
                             // Intercept blob file download links in DOM
                             if (!window._blobClickInterceptor) {
