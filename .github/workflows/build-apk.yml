@@ -34,11 +34,25 @@ jobs:
       - name: Build Debug APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-configuration-cache --stacktrace
+          ./gradlew assembleDebug --no-configuration-cache --stacktrace > build_log.txt 2>&1 || true
+          cat build_log.txt
+
+      - name: Upload Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build_log.txt
+
+      - name: Check Build Success
+        run: |
+          if [ ! -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK was not generated. Check build_log.txt."
+            exit 1
+          fi
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: app-debug-apk
           path: app/build/outputs/apk/debug/*.apk
