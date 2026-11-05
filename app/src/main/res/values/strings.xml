@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Sunflower</string>
+    <string name="app_short_name">Sunflower</string>
+    <string name="official_url">https://web.whatsapp.com/</string>
+    <string name="privacy_title">About &amp; Privacy</string>
+    <string name="reload">Reload</string>
+    <string name="reset_session">Reset Session</string>
+    <string name="open_browser">Open in Browser</string>
+    <string name="open_official_app">Open WhatsApp App</string>
+    <string name="network_offline">No internet connection</string>
+    <string name="connection_error">Failed to connect to WhatsApp Web</string>
+    <string name="retry">Retry</string>
+    <string name="desktop_mode">Desktop View</string>
+    <string name="mobile_mode">Mobile View</string>
+    <string name="nav_chats">Chats</string>
+    <string name="nav_updates">Updates</string>
+    <string name="nav_communities">Communities</string>
+    <string name="nav_calls">Calls</string>
+    <string name="search_hint">Search in page…</string>
+    <string name="zoom_title">Display &amp; Text Scale</string>
+</resources>

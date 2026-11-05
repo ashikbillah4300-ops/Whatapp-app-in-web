@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Leaf accent behind flower -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M66,66 C78,74 85,62 82,48 C72,50 64,58 66,66 Z" />
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M38,68 C26,76 20,64 24,50 C33,52 40,60 38,68 Z" />
+
+    <!-- 12 Radiating Sunflower Petals around center (54, 54) -->
+    <!-- 0 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="0">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 30 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="30">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+    <!-- 60 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="60">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 90 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="90">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+    <!-- 120 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="120">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 150 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="150">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+    <!-- 180 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="180">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 210 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="210">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+    <!-- 240 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="240">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 270 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="270">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+    <!-- 300 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="300">
+        <path android:fillColor="#FFC107" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+        <path android:fillColor="#FFB300" android:pathData="M54,24 C56,32 57,40 54,50 C52,40 53,32 54,24 Z" />
+    </group>
+    <!-- 330 deg -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="330">
+        <path android:fillColor="#FFD54F" android:pathData="M54,22 C58,32 60,42 54,54 C48,42 50,32 54,22 Z" />
+    </group>
+
+    <!-- Center Seed Disk -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M54,40 A14,14 0 1 0 54,68 A14,14 0 1 0 54,40 Z" />
+
+    <!-- Seed Texture Rings -->
+    <path
+        android:strokeColor="#5D4037"
+        android:strokeWidth="1.8"
+        android:fillColor="#00000000"
+        android:pathData="M54,44 A10,10 0 1 0 54,64 A10,10 0 1 0 54,44 Z" />
+
+    <path
+        android:strokeColor="#8D6E63"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:pathData="M54,48 A6,6 0 1 0 54,60 A6,6 0 1 0 54,48 Z" />
+
+    <!-- Small center chat bubble motif in soft mint/white -->
+    <path
+        android:fillColor="#25D366"
+        android:pathData="M54,49 C51.8,49 50,50.8 50,53 C50,53.8 50.3,54.6 50.7,55.2 L50.2,57 L52,56.5 C52.6,56.8 53.3,57 54,57 C56.2,57 58,55.2 58,53 C58,50.8 56.2,49 54,49 Z" />
+</vector>
